@@ -1,0 +1,24 @@
+// enable NXC
+#include "NXCDefs.h"
+// main
+task main() {
+	// we use an ultrasonic sensor at port 1
+	SetSensorType(IN_1,IN_TYPE_REFLECTION);
+	// endless loop
+	while(1) {
+		// wait until ultrasonic sensor detects something
+		do {
+			// do nothing until ultrasonic sensor detects
+			// an object nearer than 50 inches
+		} while(Sensor(IN_1) > 50);
+		// run motors synchronized for 10 rotations which is 3600 degrees
+		// third parameter 100 means: B and C in opposite directions
+		RotateMotorEx (OUT_BC, 75, 3600, 100, true);
+		// wait until ultrasonic sensor does not detect anything any longer
+		while(Sensor(IN_1) < 50) {
+			// do nothing
+		}
+		// switch back the bridge
+		RotateMotorEx (OUT_BC, 75, -3600, 100, true);
+	}
+}

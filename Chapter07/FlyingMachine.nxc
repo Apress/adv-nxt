@@ -1,0 +1,48 @@
+// enable NXC
+#include "NXCDefs.h"
+
+// function for lowering or lifting the wings
+sub moveWings(bool lift) {
+	// run motors synchronized for 2 rotations (720 degrees)
+	if(lift) {
+		RotateMotorEx (OUT_BC, 50, 720, 100, true);
+	} else {
+		RotateMotorEx (OUT_BC, 50, 720, -100, true);
+	}
+}
+
+// main
+task main() {
+	// check connection of the flying machine's NXT Brick
+	// on connection 1
+	// display error and stop if no connection is available
+	if(!(BluetoothStatus(1)!=NO_ERR)) {
+		TextOut(5,LCD_LINE2,"no conn");
+		Wait(2000);
+		Stop(true);
+	}
+	// internal state variable
+	bool wingsUp = false;
+	// program shall run until user turns it off
+	while(true) {
+		// we wait for an incoming message from the remote control
+		// on inbox 1
+		string message;
+		while(!ReceiveRemoteString(1,true,message)) {
+			// do nothing
+		}
+		// we are interested in messages from the remote control only
+		if(StrToNum(message)!=42)
+			continue;
+		// move wings according to the internal state
+		if(wingsUp) {
+			// lower wings
+			moveWings(false);
+		} else {
+			// lift wings
+			moveWings(true);
+		}
+		// switch state variable
+		wingsUp = !wingsUp;
+	}
+}

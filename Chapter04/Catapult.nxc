@@ -1,0 +1,29 @@
+// enable NXC
+#include "NXCDefs.h"
+// main
+task main() {
+	// define sensors at ports 1 and 2 to be touch sensors
+	SetSensorType(IN_1,IN_TYPE_SWITCH);
+	SetSensorType(IN_2,IN_TYPE_SWITCH);
+	// endless loop
+	while(1) {
+		// lift crank mechanism
+		RotateMotor(OUT_A, 75, 30);
+		// load catapult
+		// run motor until the first
+		// touch sensor gets pressed
+		OnFwd (OUT_C, 100);
+		while(Sensor(IN_1) == 0) {
+			// do nothing
+		}
+		Off(OUT_C);
+		// wait for the user to press the second touch sensor
+		while(Sensor(IN_2) == 0) {
+			// do nothing
+		}
+		// drop crank mechanism
+		RotateMotor(OUT_A, -75, 30);
+		// wait two seconds
+		Wait(2000);
+	}
+}

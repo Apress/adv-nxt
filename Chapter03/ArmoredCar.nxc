@@ -1,0 +1,12 @@
+// enable NXC
+#include "NXCDefs.h"
+// main
+task main() {
+	// endless loop
+	while (true) {
+		// run motors B and C synchronized on a power level of 75%
+		// the third argument 100 means that both motors
+		// run in the opposite direction
+		OnFwdSync (OUT_BC, 75, 100);
+	}
+}

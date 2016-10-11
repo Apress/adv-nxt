@@ -1,0 +1,28 @@
+// enable NXC
+#include "NXCDefs.h"
+// main
+task main() {
+	// check connection of the flying machine's NXT Brick
+	// on connection 1
+	
+	// display error and stop if no connection is available
+	if(!(BluetoothStatus(1)!=NO_ERR)) {
+		TextOut(5,LCD_LINE2,"no conn");
+		Wait(2000);
+		Stop(true);
+	}
+	// program shall run until user turns it off
+	while(true) {
+		// reset the internal rotation sensor of Motor C
+		ResetAllTachoCounts(OUT_C);
+		// we wait for the user pushing down the pedal
+		// corresponds to the motor turning at least 30 degrees
+		// in an arbitrary direction
+		while(!abs(MotorRotationCount(OUT_C))) {
+			// do nothing
+		}
+		// now we send an appropriate message via Bluetooth
+		string message = "42";
+		SendRemoteString(1,1,message);
+	}
+}
